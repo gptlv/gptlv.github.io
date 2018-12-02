@@ -55,6 +55,9 @@ table {
 	color: white;
 	justify-content: flex-end;
 }
+.footer:hover {
+	color: white;	
+}
 body {
 	
 }
