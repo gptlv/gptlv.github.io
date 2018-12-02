@@ -47,6 +47,9 @@ table {
 	grid-column: 1/4;
 	
 }
+.header:hover {
+	color: white;	
+}
 .footer {
 	display: flex;
 	grid-column: 1/4;
@@ -54,9 +57,6 @@ table {
 	font-size: 2em;
 	color: white;
 	justify-content: flex-end;
-}
-.footer:hover {
-	color: white;	
 }
 body {
 	
