@@ -1,0 +1,221 @@
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp,small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1.2;
+	font-family: 'Julius Sans One', sans-serif;
+	background: linear-gradient(to bottom right, white, grey) no-repeat;
+
+}
+ol { 
+	padding-left: 1.4em;
+	list-style: decimal;
+}
+ul {
+	padding-left: 1.4em
+	list-style: square;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+} 
+.wrapper {
+	display: grid;
+	grid-gap: 5px;
+	grid-template-columns: minmax(120px, 240px) minmax(240px, 1440px) minmax(120px, 240px);
+    grid-template-rows: repeat(auto-fit, 150px);
+}
+.block {
+	background: rgba(0,0,0,.25);
+}
+.header {
+	display: flex;
+	font-size: 5em;
+	align-items: center;
+	justify-content: center;	
+	grid-column: 1/4;
+	
+}
+.header:hover {
+	color: white;
+	transition: color .3s  ease-out;
+}
+.footer {
+	display: flex;
+	grid-column: 1/4;
+	grid-row: 3/4;
+	font-size: 2em;
+	color: white;
+	justify-content: flex-end;
+}
+body {
+	
+}
+a {
+	text-decoration: none;
+}
+nav a {
+	display: flex;
+	width: 100%;
+	color: white;
+	justify-content: flex-end;
+	align-items: center;
+	font-size: 3em;
+	opacity: 1;
+	padding: 5px 0;
+}
+nav a:hover {
+	background: #DBD9D1;
+	color: black;
+	transition: color, background .3s ease-in;
+}
+.current { 
+	background: #6D6E70;
+}
+.main {
+	display: block;
+	font-size: 3em;
+	padding: 5px 20px;
+	text-align: left;
+	justify-content: center;
+	
+}
+.links {
+	display: block; 
+	font-size: 3em;
+	color: white;
+}
+.icon {
+	font-size: 1.7rem;
+	max-width: 240px;
+	height:60px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 10px 0;
+	justify-content: center;
+}
+.icon img {
+	display: flex;
+	width: 50px;
+	height: 50px;
+	position: relative;
+	padding: 0 5px;
+}
+.links p {
+	display: none;
+}
+.links a {
+	display: flex;
+}
+.icon:hover p {
+	display: flex;
+	color: white;
+}
+.vk:hover {
+	background: #4c75a3;
+}
+.ig:hover {
+	background:#cc2366 ;
+}
+.yt:hover {
+	background: #ff0000;
+}
+.tg:hover {
+	background: #0088cc;
+}
+.sc:hover {
+	background: #ff3300;
+	
+}
+.fm:hover {
+	background: #d51007;
+}
+.icon:hover {
+	transition: background .4s ease-in;
+}
+.images {
+	padding-top: 20px;
+	display: grid;
+	grid-gap: 15px;
+	grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+	grid-template-rows: repeat(n, 200px);
+	
+}
+.images img {
+	width: 100%;
+    height: 100%;
+    object-fit: cover;
+	border-radius: 5px;
+	box-shadow: 3px 3px #DBD9D1;
+}
+.images a {
+	width: 100%;
+    height: 100%;	
+}
+.wrapper1 {
+	
+}
+.main p {
+	display: block; 
+	color: white;
+	min-height: 900px;
+}
+.images img:hover {
+	opacity: .8;
+	transform: scale(1.025);
+	transition: transform .1s ease-out;
+}
+.paginator {
+	font-size: .6em;
+	margin-top: 10px;
+	display: flex;
+	padding: 5px;
+	justify-content: center;
+	align-items: center;
+}
+.button {
+	display: flex;
+	width: 40px;
+	height: 40px;
+	background: #6D6E70;
+	border-radius: 5px;
+	color: white;
+	justify-content: center;
+	align-items: center;
+	margin: 3px;
+}
+.now {
+	background: #575559;
+}
+.none {
+	opacity: .25;
+}
+@media (max-width: 1250px) {
+	.images {
+		grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+	}
+}
+/* .rate { */
+	/* display: none; */
+	/* width: 100px; */
+	/* background: white; */
+	/* position: absolute; */
+	/* top: 250px; */
+	/* border-radius: 5px; */
+	
+/* } */
+/* .images a:hover .rate { */
+	/* display: block; */
+/* } */

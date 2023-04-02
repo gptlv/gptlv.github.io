@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>A Survey Form</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1 id="title">Arizona Lovers Survey Form</h1>
+    <p id="description">Tell us more about your preferences</p>
+    <form id="survey-form">
+
+      <fieldset>
+        <label id="name-label" for="name">Name<input id="name" type="text" name="name" required placeholder="Enter your name"/></label>
+        <label id="email-label"for="email">Email<input id="email" type="email" name="email"required placeholder="Enter you email"/></label>
+        <label id="number-label"for="number">Age<input id="number" type="number" name="number" min="13" max="120" placeholder="Age"/></label>
+        <label id="dropdown-label" for="dropdown">How did you find out about us?<select id="dropdown" name="dropdown" required>
+          <option value="" disabled selected hidden>Select one</option>
+          <option value="1">Youtube</option>
+          <option value="2">Reddit</option>
+          <option value="3">Friends or family</option>
+          <option value="4">idk idc lol</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <label id="assure-label" name="assure-label">Do you <em>really</em> love Arizona Iced Tea?</label>
+        <label class="radio-label" id="positive-label" name="positive-label" for="positive"><input id="positive" type="radio" name="assure-radio" value="1" checked class="inline"/>Absolutely</label>
+        <label class="radio-label" id="negative-label" name="negatibe-label" for="negative"><input id="negative" type="radio" name="assure-radio" value="0" class="inline"/>Uhh not really</label>
+      </fieldset>
+      
+      <fieldset>
+        <label id="flavors-label" name="flavors-label">What flavors have you tried?</label>
+          <label class="checkbox-label" for="ginseng-and-honey" id="ginseng-and-honey-label"><input id="ginseng-and-honey" name="ginseng-and-honey" type="checkbox" value="1" class="inline"/>Green Tea with Ginseng and Honey</label>
+          <label class="checkbox-label" for="lemon" id="lemon-label"><input id="lemon" nane="lemon" type="checkbox" value="2" class="inline"/>Iced Tea with Lemon Flavor</label>
+          <label class="checkbox-label" for="raspberry" id="raspberry-label"><input id="raspberry" name="raspberry"type="checkbox" value="3" class="inline"/>Iced Tea with Raspberry Flavor</label>
+          <label class="checkbox-label" for="mango" id="mango-label"><input id="mango" name="mango" type="checkbox" value="4" class="inline"/>Mucho Mango</label>
+          <label class="checkbox-label" for="punch" id="punch-label"><input id="punch" name="punch" type="checkbox" value="5" class="inline"/>Fruit Punch</label>
+          <label class="checkbox-label" for="kiwi" id="kiwi-label"><input id="kiwi" name="kiwi" type="checkbox" value="6" class="inline"/>Kiwi Strawberry</label>
+          <label class="checkbox-label" for="watermelon" id="watermelon-label"><input id="watermelon" name="watermelon" type="checkbox" value="7" class="inline"/>Watermelon</label>
+          <label class="checkbox-label" for="peach" id="peach-label"><input id="peach" name="peach" type="checkbox" value="8" class="inline"/>Iced Tea with Peach Flavor</label>
+          <label class="checkbox-label" for="grapeade" id="grapeade-label"><input id="grapeade" name="grapeade" type="checkbox" value="9" class="inline"/>Grapeade</label>
+          <label class="checkbox-label" for="rx" id="rx-label"><input id="rx" name="rx" type="checkbox" value="10" class="inline"/>RX Energy Herbal Tonic</label>
+        </label>
+      </fieldset>
+        
+      <fieldset>
+        <label>Got something to say?
+          <textarea id="extra" name="extra" placeholder="Open up" rows="3" cols="30"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <input type="submit" id="submit" value="Submit" />
+      </fieldset>
+    </form>
+  </body>
+</html>
