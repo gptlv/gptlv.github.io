@@ -15,22 +15,22 @@ main {
     text-align: center;
 }
 
-#title {
+.title {
     font-size: 3rem;
 }
 
-#description {
+.description {
     font-size: 1.5rem;
 }
 
-#img-div {
+.image-div {
     background-color:cornsilk;
     border-radius: 0.25em;
     margin: 0 auto;
     padding: 0.5em;
 }
-#image {
-    border-radius: 0.25rem;
+.image {
+    border-radius: 0.25em;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -39,14 +39,18 @@ main {
 
 }
 
-#img-caption {
+.image-caption {
     font-size: 1.25rem;
     max-width: 60%;
     margin: 0.5em auto;
     font-style: italic;
 }
 
-#timeline {
+.timeline-title {
+    font-size: 2rem;
+}
+
+.timeline-list {
     max-width: 50%;
     margin: 0 auto;
 }
@@ -57,12 +61,12 @@ main {
     margin-bottom: 0.5em;
 }
 
-#additional-info {
+.additional-info {
     font-weight: bold;
     font-size: 1.5rem;
 }
 
-#quote {
+.quote {
     font-size: 1.25rem;
 }
 
