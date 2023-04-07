@@ -5,6 +5,7 @@
     box-sizing: border-box;
     font-size: calc(1em + 0.8vw);
 }
+
 @media (prefers-reduced-motion: no-preference) {
     * {
       scroll-behavior: smooth;
@@ -16,7 +17,6 @@
 }
 
 body {
-    position: relative;
     line-height: 1.2em;
     font-size: 1rem;
     margin: 0;
@@ -29,21 +29,20 @@ header {
     font-size: 1.5rem;
 }
 
-#first-main-header {
+main > section:nth-child(1) > header {
     margin: 0px;
     padding-top: 0.5em;
     padding-left: 0.5em;
 }
 
-#page-header {
+nav > header {
+    text-align: center;
     margin: 0px;
     padding: 0.5em;
 }
 
-
 main {
     background-color: var(--bg-color);
-    /* margin: 0 2em; */
     padding: 0 1em;
     height: 100%;
 }
@@ -55,11 +54,6 @@ section:last-child > p {
 
 nav {
     background-color: var(--bg-color);  
-}
-
-
-nav > header {
-    text-align: center;
 }
 
 nav > ul {
@@ -122,10 +116,10 @@ code.inline-block {
         width: 80%;
     }
     nav > ul {
-        border: none;;
+        border: none;
     }
 
-    #first-main-header {
+    main > section:nth-child(1) > header {
         margin: 0px;
         padding-top: 0.5em;
         padding-left: 0.5em;
