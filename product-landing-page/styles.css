@@ -3,6 +3,8 @@
     --secondary-color: #3AA4AB;
     --grey: #E7E5E5;
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
     font-size: calc(1em + 0.8vw);
 }
 
@@ -47,14 +49,19 @@ a {
     color: unset;
 }
 
+.nav-link:hover {
+    color: var(--secondary-color);
+}
+
 nav {
     border-top: 1px solid var(--secondary-color);
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    align-items: center;
 }
 
-img {
+#header-img {
     display: block;
     margin: 0 auto 0.5em auto;
     object-fit: contain;
@@ -83,12 +90,9 @@ h1, h2, h3 {
 }
 
 .quality-description {
-    flex: 9;
+    flex: 5;
 }
 
-.option > p {
-    margin: 1em;
-}
 
 i {
     display: inline-block;
@@ -99,44 +103,68 @@ i {
 
 #video {
     display: block;
-    border: 1px solid var(--grey);
+    border: 1px solid var(--secondary-color);
     min-width: 90%;
     aspect-ratio: 16/9;
     margin: 0 auto;
 }
 
 .purchasing-options {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: space-evenly;
+    align-items: center; */
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-rows: 1fr;
     gap: 1em;
 }
 
 .option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    max-width: 75%;
+    justify-content: space-between;
     border: 1px solid var(--grey);
-    flex-basis: 0;
 }
 
 .option-header {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
     margin: 0;
     padding: 0.5em;
     background-color: var(--secondary-color);
     color: var(--bg-color)
 }
 
+.option-description {
+    /* max-width: 100%; */
+    margin: 0.5em;
+}
+
+.price {
+    display: block;
+    font-size: 1.5em;
+}
+
+.wrapper {
+    width: 100%;
+}
+
 .select-button {
+    display: block;
     font-size: 1rem;
     text-transform: uppercase;
     border: none;
     width: 90%;
-    height: 2rem;
+    /* height: 2em; */
     background-color: var(--secondary-color);
     color: var(--bg-color);
     padding: 0.5em;
-    margin: 0.5em;
+    border-radius: 3px;
+    margin: 1em auto;
 }
 
 #form {
@@ -155,9 +183,10 @@ input {
     color: var(--bg-color);
     border: none;
     width: 100%;
-    margin: 1em;
+    margin-bottom: 1em;
     font-size: 1rem;
     height: 2em;
+    padding-left: 0.5em;
 }
 
 ::placeholder {
@@ -194,4 +223,67 @@ footer {
 .copyright {
     text-align: right;
     margin: 0;
+}
+
+@media (width>=720px) {
+    :root {
+        font-size: calc(0.8em + 0.8vw);
+    }
+
+    section {
+        margin-bottom: 30vw;
+    }
+    
+    .promotion {
+        margin-bottom: unset;
+        margin-top: -15vw;
+    }
+
+    header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--secondary-color);
+    }
+
+    #header-img {
+        margin: 0.25em 0 0.5em 0.25em;
+        display: block;
+        object-fit: contain;
+        width: auto;
+        height: auto;
+    }
+
+    .nav-link {
+        padding: 0 1em;
+    }
+
+    main {
+        margin: 0 auto;
+        max-width: 60%;
+    }
+
+    .purchasing-options {
+        display: grid;
+        grid-auto-flow: unset;
+        grid-auto-rows: unset;
+        gap: 1em;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: calc(100% / 3);
+        /* justify-content: space-between; */
+        /* max-width: 75%; */
+        border: 1px solid var(--grey);
+        height: unset;
+        /* flex-basis: 100%; */
+    }
+
 }
