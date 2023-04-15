@@ -1,6 +1,7 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 const BODY_RADIUS = 5;
+const FOOD_RADIUS = 5;
 const DEFAULT_DIRECTION = { up: false, right: false, down: false, left: false };
 const SNAKE_HEAD_INDEX = 0;
 const CANVAS_WIDTH = canvas.width;
@@ -8,6 +9,7 @@ const CANVAS_HEIGHT = canvas.height;
 const STARTING_POINT_X = CANVAS_WIDTH / 2;
 const STARTING_POINT_Y = CANVAS_HEIGHT / 2;
 const SNAKE_COLOR = "#809C13";
+const FOOD_COLOR = "#FF0000";
 function disableBrowserScroll() {
   window.addEventListener(
     "keydown",
@@ -24,12 +26,73 @@ function disableBrowserScroll() {
   );
 }
 
-class BodyPart {
-  constructor(bodyPartPositionX, bodyPartPositionY, dx, dy, currentDirection) {
+class Food {
+  constructor() {
+    this.positionX = 0;
+    this.positionY = 0;
+  }
+
+  generateNewCoordinates(bodyParts) {
+    while (true) {
+      let newPositionX = Math.round(
+        Math.random() * (CANVAS_WIDTH * 0.9 - CANVAS_WIDTH * 0.1 + 1) +
+          CANVAS_WIDTH * 0.1 -
+          0.5
+      );
+      let newPositionY = Math.round(
+        Math.random() * (CANVAS_HEIGHT * 0.9 - CANVAS_HEIGHT * 0.1 + 1) +
+          CANVAS_HEIGHT * 0.1 -
+          0.5
+      );
+      if (
+        bodyParts.every(
+          (bodyPart) =>
+            bodyPart.positionX !== newPositionX &&
+            bodyPart.positionY !== newPositionY
+        ) //TODO account for body radius
+      ) {
+        this.positionX = newPositionX;
+        this.positionY = newPositionY;
+        break;
+      }
+    }
+  }
+
+  isCollisionDetected(snakeHead) {
+    if (
+      (Math.abs(this.positionX - snakeHead.positionX) <
+        BODY_RADIUS + FOOD_RADIUS &&
+        this.positionY === snakeHead.positionY) ||
+      (Math.abs(this.positionY - snakeHead.positionY) <
+        BODY_RADIUS + FOOD_RADIUS &&
+        this.positionX === snakeHead.positionX)
+      // this.positionX === snakeHead.positionX &&
+      // this.positionY === snakeHead.positionY
+    ) {
+      return true;
+    }
+  }
+
+  drawFood() {
+    ctx.beginPath();
+    ctx.arc(this.positionX, this.positionY, FOOD_RADIUS, 0, Math.PI * 2);
+    ctx.fillStyle = FOOD_COLOR;
+    ctx.fill();
+    ctx.closePath();
+  }
+}
+class bodyPart {
+  constructor(
+    bodyPartPositionX,
+    bodyPartPositionY,
+    horizontalSpeed,
+    verticalSpeed,
+    currentDirection
+  ) {
     this.positionX = bodyPartPositionX;
     this.positionY = bodyPartPositionY;
-    this.dx = dx;
-    this.dy = dy;
+    this.horizontalSpeed = horizontalSpeed;
+    this.verticalSpeed = verticalSpeed;
     this.direction = { ...currentDirection };
     this.turns = [];
   }
@@ -38,7 +101,7 @@ class BodyPart {
 class Snake {
   constructor(snakeHeadPositionX, snakeHeadPositionY) {
     this.bodyParts = [
-      new BodyPart(snakeHeadPositionX, snakeHeadPositionY, 0, 0, {
+      new bodyPart(snakeHeadPositionX, snakeHeadPositionY, 0, 0, {
         ...DEFAULT_DIRECTION,
       }),
     ];
@@ -66,53 +129,59 @@ class Snake {
   changeSnakeDirection() {
     if (
       upPressed &&
-      this.bodyParts[SNAKE_HEAD_INDEX].dy <= 0 &&
+      this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed <= 0 &&
       !this.bodyParts[SNAKE_HEAD_INDEX].direction.up
     ) {
-      if (this.bodyParts[SNAKE_HEAD_INDEX].dy === 0) {
-        this.bodyParts[SNAKE_HEAD_INDEX].dy++;
+      if (this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed === 0) {
+        this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed++;
       }
-      this.bodyParts[SNAKE_HEAD_INDEX].dy = -Math.abs(this.bodyParts[0].dy);
-      this.bodyParts[SNAKE_HEAD_INDEX].dx = 0;
+      this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed = -Math.abs(
+        this.bodyParts[0].verticalSpeed
+      );
+      this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed = 0;
       this.#setMovementDirection(SNAKE_HEAD_INDEX, "up");
 
       this.#addTurnPosition("up");
     } else if (
       rightPressed &&
-      this.bodyParts[SNAKE_HEAD_INDEX].dx >= 0 &&
+      this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed >= 0 &&
       !this.bodyParts[SNAKE_HEAD_INDEX].direction.right
     ) {
-      if (this.bodyParts[SNAKE_HEAD_INDEX].dx === 0) {
-        this.bodyParts[SNAKE_HEAD_INDEX].dx++;
+      if (this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed === 0) {
+        this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed++;
       }
-      this.bodyParts[SNAKE_HEAD_INDEX].dx = Math.abs(this.bodyParts[0].dx);
-      this.bodyParts[SNAKE_HEAD_INDEX].dy = 0;
+      this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed = Math.abs(
+        this.bodyParts[0].horizontalSpeed
+      );
+      this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed = 0;
       this.#setMovementDirection(SNAKE_HEAD_INDEX, "right");
       this.#addTurnPosition("right");
     } else if (
       downPressed &&
-      this.bodyParts[SNAKE_HEAD_INDEX].dy >= 0 &&
+      this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed >= 0 &&
       !this.bodyParts[SNAKE_HEAD_INDEX].direction.down
     ) {
-      if (this.bodyParts[SNAKE_HEAD_INDEX].dy === 0) {
-        this.bodyParts[SNAKE_HEAD_INDEX].dy++;
+      if (this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed === 0) {
+        this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed++;
       }
-      this.bodyParts[SNAKE_HEAD_INDEX].dy = Math.abs(this.bodyParts[0].dy);
-      this.bodyParts[SNAKE_HEAD_INDEX].dx = 0;
+      this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed = Math.abs(
+        this.bodyParts[0].verticalSpeed
+      );
+      this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed = 0;
       this.#setMovementDirection(SNAKE_HEAD_INDEX, "down");
       this.#addTurnPosition("down");
     } else if (
       leftPressed &&
-      this.bodyParts[SNAKE_HEAD_INDEX].dx <= 0 &&
+      this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed <= 0 &&
       !this.bodyParts[SNAKE_HEAD_INDEX].direction.left
     ) {
-      if (this.bodyParts[SNAKE_HEAD_INDEX].dx === 0) {
-        this.bodyParts[SNAKE_HEAD_INDEX].dx++;
+      if (this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed === 0) {
+        this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed++;
       }
-      this.bodyParts[SNAKE_HEAD_INDEX].dx = -Math.abs(
-        this.bodyParts[SNAKE_HEAD_INDEX].dx
+      this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed = -Math.abs(
+        this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed
       );
-      this.bodyParts[SNAKE_HEAD_INDEX].dy = 0;
+      this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed = 0;
       this.#setMovementDirection(SNAKE_HEAD_INDEX, "left");
       this.#addTurnPosition("left");
     }
@@ -120,21 +189,21 @@ class Snake {
 
   renderSnakeMovement() {
     this.bodyParts[SNAKE_HEAD_INDEX].positionX +=
-      this.bodyParts[SNAKE_HEAD_INDEX].dx;
+      this.bodyParts[SNAKE_HEAD_INDEX].horizontalSpeed;
     this.bodyParts[SNAKE_HEAD_INDEX].positionY +=
-      this.bodyParts[SNAKE_HEAD_INDEX].dy;
+      this.bodyParts[SNAKE_HEAD_INDEX].verticalSpeed;
   }
 
   renderBodyMovement() {
     for (let i = 1; i < this.bodyParts.length; i++) {
       if (this.bodyParts[i].direction.up) {
-        this.bodyParts[i].positionY += this.bodyParts[i].dy;
+        this.bodyParts[i].positionY += this.bodyParts[i].verticalSpeed;
       } else if (this.bodyParts[i].direction.right) {
-        this.bodyParts[i].positionX += this.bodyParts[i].dx;
+        this.bodyParts[i].positionX += this.bodyParts[i].horizontalSpeed;
       } else if (this.bodyParts[i].direction.down) {
-        this.bodyParts[i].positionY += this.bodyParts[i].dy;
+        this.bodyParts[i].positionY += this.bodyParts[i].verticalSpeed;
       } else if (this.bodyParts[i].direction.left) {
-        this.bodyParts[i].positionX += this.bodyParts[i].dx;
+        this.bodyParts[i].positionX += this.bodyParts[i].horizontalSpeed;
       }
     }
   }
@@ -151,17 +220,17 @@ class Snake {
       bodyPartPositionY = this.bodyParts.at(-1).positionY;
     } else if (currentDirection.down) {
       bodyPartPositionX = this.bodyParts.at(-1).positionX;
-      bodyPartPositionY = this.bodyParts.at(-1).positionY + 2 * BODY_RADIUS;
+      bodyPartPositionY = this.bodyParts.at(-1).positionY - 2 * BODY_RADIUS;
     } else if (currentDirection.left) {
       bodyPartPositionX = this.bodyParts.at(-1).positionX + 2 * BODY_RADIUS;
       bodyPartPositionY = this.bodyParts.at(-1).positionY;
     }
     this.bodyParts.push(
-      new BodyPart(
+      new bodyPart(
         bodyPartPositionX,
         bodyPartPositionY,
-        this.bodyParts.at(-1).dx,
-        this.bodyParts.at(-1).dy,
+        this.bodyParts.at(-1).horizontalSpeed,
+        this.bodyParts.at(-1).verticalSpeed,
         currentDirection
       )
     );
@@ -173,19 +242,25 @@ class Snake {
 
   adjustBodyPartsPosition() {
     for (let i = 0; i < this.bodyParts.length; i++) {
-      if (this.bodyParts[i].positionX - BODY_RADIUS + dx > CANVAS_WIDTH) {
+      if (
+        this.bodyParts[i].positionX - BODY_RADIUS + horizontalSpeed >
+        CANVAS_WIDTH
+      ) {
         this.bodyParts[i].positionX = 0 - BODY_RADIUS;
       }
 
-      if (this.bodyParts[i].positionX + BODY_RADIUS + dx < 0) {
+      if (this.bodyParts[i].positionX + BODY_RADIUS + horizontalSpeed < 0) {
         this.bodyParts[i].positionX = CANVAS_WIDTH + BODY_RADIUS;
       }
 
-      if (this.bodyParts[i].positionY - BODY_RADIUS + dy > CANVAS_HEIGHT) {
+      if (
+        this.bodyParts[i].positionY - BODY_RADIUS + verticalSpeed >
+        CANVAS_HEIGHT
+      ) {
         this.bodyParts[i].positionY = 0 - BODY_RADIUS;
       }
 
-      if (this.bodyParts[i].positionY + BODY_RADIUS + dy < 0) {
+      if (this.bodyParts[i].positionY + BODY_RADIUS + verticalSpeed < 0) {
         this.bodyParts[i].positionY = CANVAS_HEIGHT + BODY_RADIUS;
       }
     }
@@ -203,17 +278,19 @@ class Snake {
           ...this.bodyParts[i].turns.at(0).direction,
         };
         if (this.bodyParts[i].direction.up) {
-          this.bodyParts[i].dx = 0;
-          this.bodyParts[i].dy = this.bodyParts[i - 1].dy;
+          this.bodyParts[i].horizontalSpeed = 0;
+          this.bodyParts[i].verticalSpeed = this.bodyParts[i - 1].verticalSpeed;
         } else if (this.bodyParts[i].direction.right) {
-          this.bodyParts[i].dx = this.bodyParts[i - 1].dx;
-          this.bodyParts[i].dy = 0;
+          this.bodyParts[i].horizontalSpeed =
+            this.bodyParts[i - 1].horizontalSpeed;
+          this.bodyParts[i].verticalSpeed = 0;
         } else if (this.bodyParts[i].direction.down) {
-          this.bodyParts[i].dx = 0;
-          this.bodyParts[i].dy = this.bodyParts[i - 1].dy;
+          this.bodyParts[i].horizontalSpeed = 0;
+          this.bodyParts[i].verticalSpeed = this.bodyParts[i - 1].verticalSpeed;
         } else if (this.bodyParts[i].direction.left) {
-          this.bodyParts[i].dx = this.bodyParts[i - 1].dx;
-          this.bodyParts[i].dy = 0;
+          this.bodyParts[i].horizontalSpeed =
+            this.bodyParts[i - 1].horizontalSpeed;
+          this.bodyParts[i].verticalSpeed = 0;
         }
         this.bodyParts[i].turns.shift();
       }
@@ -237,27 +314,20 @@ class Snake {
     ctx.closePath();
   }
 }
+disableBrowserScroll();
 
 const snake = new Snake(STARTING_POINT_X, STARTING_POINT_Y);
+const food = new Food();
+food.generateNewCoordinates(snake.bodyParts);
+food.drawFood();
 
-let foodPositionX = CANVAS_WIDTH * Math.random();
-let foodPositionY = CANVAS_HEIGHT * Math.random();
-
-let dx = 0;
-let dy = 0;
+let horizontalSpeed = 0;
+let verticalSpeed = 0;
 
 let rightPressed = false;
 let leftPressed = false;
 let upPressed = false;
 let downPressed = false;
-
-function drawFood(foodPositionX, foodPositionY) {
-  ctx.beginPath();
-  ctx.rect(foodPositionX, foodPositionY, 20, 20);
-  ctx.fillStyle = "#FF0000";
-  ctx.fill();
-  ctx.closePath();
-}
 
 document.addEventListener("keydown", leftAndRightKeyDownHandler, false);
 document.addEventListener("keyup", leftAndRightKeyUpHandler, false);
@@ -304,25 +374,26 @@ function spaceKeyDownHandler(e) {
   }
 }
 
-disableBrowserScroll();
-
 function draw() {
+  snake.changeSnakeDirection();
+  snake.adjustBodyPartsPosition();
+  snake.changeBodyPartsDirection();
   snake.renderSnakeMovement();
   snake.renderBodyMovement();
-  snake.changeSnakeDirection();
 
   // document.getElementById("up").innerHTML = [upPressed, snake.headPositionX];
   // document.getElementById("up").innerHTML = [JSON.stringify(snake.bodyParts)];
   // document.getElementById("down").innerHTML = [downPressed, snake.headPositionX];
   // document.getElementById("left").innerHTML = [leftPressed, snake.headPositionY];
-  // document.getElementById("right").innerHTML = [];
+  // document.getElementById("right").innerHTML = [JSON.stringify(food)];
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // drawFood(foodPositionX, foodPositionY);
+  food.drawFood();
+  if (food.isCollisionDetected(snake.bodyParts[SNAKE_HEAD_INDEX])) {
+    food.generateNewCoordinates(snake.bodyParts);
+    snake.addBodyPart();
+  }
   snake.drawSnake();
-
-  snake.adjustBodyPartsPosition();
-  snake.changeBodyPartsDirection();
 }
 
 setInterval(draw, 10);
