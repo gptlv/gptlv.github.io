@@ -58,7 +58,7 @@ class Food {
     }
   }
 
-  isCollisionDetected(snakeHead) {
+  isFoodEaten(snakeHead) {
     if (
       (Math.abs(this.positionX - snakeHead.positionX) <
         BODY_RADIUS + FOOD_RADIUS &&
@@ -66,11 +66,10 @@ class Food {
       (Math.abs(this.positionY - snakeHead.positionY) <
         BODY_RADIUS + FOOD_RADIUS &&
         this.positionX === snakeHead.positionX)
-      // this.positionX === snakeHead.positionX &&
-      // this.positionY === snakeHead.positionY
     ) {
       return true;
     }
+    return false;
   }
 
   drawFood() {
@@ -297,6 +296,22 @@ class Snake {
     }
   }
 
+  // a function that returns true if the snake collides with itself
+  isCollisionDetected(snakeHead) {
+    for (let i = 1; i < this.bodyParts.length; i++) {
+      if (
+        (Math.abs(snakeHead.positionX - this.bodyParts[i].positionX) <
+          2 * BODY_RADIUS &&
+          snakeHead.positionY === this.bodyParts[i].positionY) ||
+        (Math.abs(snakeHead.positionY - this.bodyParts[i].positionY) <
+          2 * BODY_RADIUS &&
+          snakeHead.positionX === this.bodyParts[i].positionX)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
   drawSnake() {
     for (let i = 0; i < this.bodyParts.length; i++) {
       this.#drawBodyPart(
@@ -381,17 +396,20 @@ function draw() {
   snake.renderSnakeMovement();
   snake.renderBodyMovement();
 
-  // document.getElementById("up").innerHTML = [upPressed, snake.headPositionX];
-  // document.getElementById("up").innerHTML = [JSON.stringify(snake.bodyParts)];
-  // document.getElementById("down").innerHTML = [downPressed, snake.headPositionX];
-  // document.getElementById("left").innerHTML = [leftPressed, snake.headPositionY];
-  // document.getElementById("right").innerHTML = [JSON.stringify(food)];
+  // document.getElementById("up").innerHTML = [];
+  // document.getElementById("down").innerHTML = [];
+  // document.getElementById("left").innerHTML = [];
+  // document.getElementById("right").innerHTML = [];
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   food.drawFood();
-  if (food.isCollisionDetected(snake.bodyParts[SNAKE_HEAD_INDEX])) {
+  if (food.isFoodEaten(snake.bodyParts[SNAKE_HEAD_INDEX])) {
     food.generateNewCoordinates(snake.bodyParts);
     snake.addBodyPart();
+  }
+
+  if (snake.isCollisionDetected(snake.bodyParts[SNAKE_HEAD_INDEX])) {
+    location.reload();
   }
   snake.drawSnake();
 }
