@@ -1,12 +1,15 @@
 :root {
     box-sizing: border-box;
+    --font-color: #212427;
 }
 
 *, ::before, ::after {
     box-sizing: inherit;
+    font-family: VT323;
 }
 
 body {
+    color: var(--font-color);
     height: 100vh;
     margin: 0;
     padding: 0;
@@ -17,12 +20,34 @@ body {
 main {
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-canvas {
+#highscores-title, #score-data {
+    text-transform: uppercase;
+}
+
+#score-data {
+    width: 480px;
+    text-align: right;
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 2rem;
+}
+
+#game-canvas {
     background: #eee;
     display: block;
     margin: 0 auto;
+}
+
+#high-scores-list {
+    font-size: 1.5rem;
+    width: 480px;
+    height: 240px;
+    margin: 0;
+    padding: 0;
+    list-style: decimal inside none;
 }

@@ -6,19 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake Game</title>
     <link rel="stylesheet" href="styles.css">
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=VT323">
 </head>
 <body>
     <main>
-        <canvas id="myCanvas" width="480" height="320"></canvas>
-        
+        <p id="score-data">Score: <span id="score">0</span></p>
+        <canvas id="game-canvas" width="480" height="320"></canvas>
+        <h1 id="highscores-title">Highscores</h1>
+        <ol id="high-scores-list">
+        </ol>
     </main>
-    <!-- <ul>
-        <li id="up"></li>
-        <li id="down"></li>
-        <li id="left"></li>
-        <li id="right"></li>
-    </ul> -->
     <script src="script.js"></script>
 </body>
 </html>
