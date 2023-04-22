@@ -9,57 +9,57 @@
 </head>
 <body>
     <div class="calculator">
-        <div class="display" id="display"><span class="display-content">0</span></div>
+        <div class="display"><span class="display-content">0</span></div>
         <div class="buttons">
-            <div class="button operator" id="opening-parenthesis"><span>(</span></div>
+            <!-- <div class="button operator" id="opening-parenthesis"><span>(</span></div>
             <div class="button operator" id="closing-parenthesis"><span>)</span></div>
             <div class="button memory-operator" id="memory-clear"><span>mc</span></div>
             <div class="button memory-operator" id="memory-add"><span>m+</span></div>
             <div class="button memory-operator" id="memory-substract"><span>m-</span></div>
-            <div class="button memory-operator" id="memory-recall"><span>mr</span></div>
-            <div class="button operator portrait" id="clear"><span>ac</span></div>
-            <div class="button operator portrait" id="positive-negative"><span>±</span></div>
-            <div class="button operator portrait" id="percent"><span>%</span></div>
-            <div class="button operator portrait" id="divide"><span>÷</span></div>
-            <div class="button operator" id="pow-of-two"><span>2nd</span></div>
+            <div class="button memory-operator" id="memory-recall"><span>mr</span></div> -->
+            <div class="button portrait" data-type="clear"><span>ac</span></div>
+            <div class="button portrait" data-type="unary" data-action="negate"><span>±</span></div>
+            <div class="button portrait" data-type="unary" data-action="percentage"><span>%</span></div>
+            <div class="button portrait" data-type="binary" data-action="divide"><span>÷</span></div>
+            <!-- <div class="button operator" id="pow-of-two"><span>2nd</span></div>
             <div class="button operator" id="square"><span>x^2</span></div>
             <div class="button operator" id="cube"><span>x^3</span></div>
             <div class="button operator" id="pow"><span>x^y</span></div>
             <div class="button operator" id="exp"><span>e^x</span></div>
-            <div class="button operator" id="pow-of-ten"><span>10^x</span></div>
-            <div class="button digit portrait" id="seven"><span>7</span></div>
-            <div class="button digit portrait" id="eight"><span>8</span></div>
-            <div class="button digit portrait" id="nine"><span>9</span></div>
-            <div class="button operator portrait" id="multiply"><span>×</span></div>
-            <div class="button operator" id="inverse"><span>1/x</span></div>
+            <div class="button operator" id="pow-of-ten"><span>10^x</span></div> -->
+            <div class="button portrait" data-type="digit"><span>7</span></div>
+            <div class="button portrait" data-type="digit"><span>8</span></div>
+            <div class="button portrait" data-type="digit"><span>9</span></div>
+            <div class="button portrait" data-type="binary" data-action="multiply"><span>×</span></div>
+            <!-- <div class="button operator" id="inverse"><span>1/x</span></div>
             <div class="button operator" id="square-root"><span>x^1/2</span></div>
             <div class="button operator" id="cube-root"><span>x^1/3</span></div>
             <div class="button operator" id="nth-root"><span>x^1/y</span></div>
             <div class="button operator" id="ln"><span>ln</span></div>
-            <div class="button operator" id="log10"><span>log10</span></div>
-            <div class="button digit portrait" id="four"><span>4</span></div>
-            <div class="button digit portrait" id="five"><span>5</span></div>
-            <div class="button digit portrait" id="six"><span>6</span></div>
-            <div class="button operator portrait" id="subtract"><span>-</span></div>
-            <div class="button operator" id="factorial"><span>x!</span></div>
+            <div class="button operator" id="log10"><span>log10</span></div> -->
+            <div class="button portrait" data-type="digit"><span>4</span></div>
+            <div class="button portrait" data-type="digit"><span>5</span></div>
+            <div class="button portrait" data-type="digit"><span>6</span></div>
+            <div class="button portrait" data-type="binary" data-action="subtract"><span>-</span></div>
+            <!-- <div class="button operator" id="factorial"><span>x!</span></div>
             <div class="button operator" id="sin"><span>sin</span></div>
             <div class="button operator" id="cos"><span>cos</span></div>
             <div class="button operator" id="tan"><span>tan</span></div>
             <div class="button const" id="e"><span>e</span></div>
-            <div class="button operator" id="enter-exp"><span>EE</span></div>
-            <div class="button digit portrait" id="one"><span>1</span></div>
-            <div class="button digit portrait" id="two"><span>2</span></div>
-            <div class="button digit portrait" id="three"><span>3</span></div>
-            <div class="button operator portrait" id="add"><span>+</span></div>
-            <div class="button operator" id="rad"><span>Rad</span></div>
+            <div class="button operator" id="enter-exp"><span>EE</span></div> -->
+            <div class="button portrait" data-type="digit"><span>1</span></div>
+            <div class="button portrait" data-type="digit"><span>2</span></div>
+            <div class="button portrait" data-type="digit"><span>3</span></div>
+            <div class="button portrait" data-type="binary" data-action="add"><span>+</span></div>
+            <!-- <div class="button operator" id="rad"><span>Rad</span></div>
             <div class="button operator" id="sinh"><span>sinh</span></div>
             <div class="button operator" id="cosh"><span>cosh</span></div>
             <div class="button operator" id="tanh"><span>tanh</span></div>
             <div class="button const" id="pi"><span>pi</span></div>
-            <div class="button operator" id="rand"><span>Rand</span></div>
-            <div class="button digit portrait" id="zero"><span>0</span></div>
-            <div class="button decimal portrait" id="decimal"><span>.</span></div>
-            <div class="button operator portrait" id="equals"><span>=</span></div>
+            <div class="button operator" id="rand"><span>Rand</span></div> -->
+            <div class="button portrait" data-type="digit"><span>0</span></div>
+            <div class="button portrait" data-type="decimal"><span>.</span></div>
+            <div class="button portrait" data-type="equal" data-action="equals"><span>=</span></div>
         </div>
     </div>
     <script src="script.js"></script>
