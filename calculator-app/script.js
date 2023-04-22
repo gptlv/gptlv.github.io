@@ -1,174 +1,262 @@
+class Display {
+  constructor(displayHtmlElement) {
+    this.displayHtmlElement = displayHtmlElement;
+  }
+
+  updateValueOnScreen(value) {
+    this.displayHtmlElement.innerText = value;
+  }
+
+  //   getValueOnScreen() {
+  //     return parseFloat(this.displayHtmlElement.innerText);
+  //   }
+}
+
 class Calculator {
-  constructor() {
-    this.currentValue = 0;
-    this.previousValue = 0;
-    this.result = 0;
-    this.operator = "";
-    this.isWaitingForNextValue = false;
-    this.isResultCalculated = false;
-    this.isOperatorButtonPressed = false;
+  constructor(displayHtmlElement) {
+    this.leftHandSide = null;
+    this.rightHandSide = null;
+    this.operator = null;
+    this.result = null;
+    this.display = new Display(displayHtmlElement);
   }
 
-  calculate() {
-    let result = 0;
-    switch (this.operator) {
-      case "add": {
-        result = this.currentValue + this.previousValue;
-        break;
-      }
-      case "subtract": {
-        result = this.currentValue - this.previousValue;
-        break;
-      }
-      case "multiply": {
-        result = this.currentValue * this.previousValue;
-        break;
-      }
-      case "divide": {
-        result = this.currentValue / this.previousValue;
-        break;
-      }
-      //   default: {
-      //     return this.value;
-      //   }
+  resetParameters() {
+    this.leftHandSide = null;
+    this.rightHandSide = null;
+    this.operator = null;
+    this.result = null;
+  }
+
+  addDigitToLeftHandSide(digit) {
+    if (this.leftHandSide === null) {
+      this.leftHandSide = "";
     }
-    this.result = result;
-    this.isResultCalculated = true;
+    this.leftHandSide += digit;
   }
-  resetStates() {
-    this.currentValue = 0;
-    this.previousValue = 0;
-    this.result = 0;
-    this.operator = "";
-    this.isWaitingForNextValue = false;
-    this.isResultCalculated = false;
-    this.isOperatorButtonPressed = false;
+
+  addDigitToRightHandSide(digit) {
+    if (this.rightHandSide === null) {
+      this.rightHandSide = "";
+    }
+    this.rightHandSide += digit;
+  }
+
+  handleDigit(digit) {
+    //!prevent typing 0 more than once (00000) -> 0
+    // if (this.leftHandSide === null || this.operator === null) {
+    if (this.operator === null) {
+      this.addDigitToLeftHandSide(digit);
+      this.display.updateValueOnScreen(this.leftHandSide);
+    } else {
+      this.addDigitToRightHandSide(digit);
+      this.display.updateValueOnScreen(this.rightHandSide);
+    }
+  }
+
+  handleBinaryOperation(operator) {
+    if (this.operator !== null && this.operator !== operator) {
+      //calculate the result when operator is changed (2+2*2) -> (4*2) -> 8
+
+      this.leftHandSide = parseFloat(this.leftHandSide);
+      this.rightHandSide = parseFloat(this.rightHandSide);
+
+      this.calculate("binary");
+      this.leftHandSide = this.result;
+      this.display.updateValueOnScreen(this.leftHandSide);
+
+      this.rightHandSide = null;
+
+      this.operator = operator;
+
+      return;
+    }
+
+    this.operator = operator; // "add", "subtract", "multiply", "divide"
+
+    if (this.rightHandSide === null) {
+      //this.setHiglight(operation.htmlElement);
+      return;
+    }
+
+    this.leftHandSide = parseFloat(this.leftHandSide);
+    this.rightHandSide = parseFloat(this.rightHandSide);
+
+    this.calculate("binary");
+    this.leftHandSide = this.result;
+    this.display.updateValueOnScreen(this.leftHandSide);
+
+    this.rightHandSide = null;
+  }
+
+  handleEqual() {
+    if (!this.operator) {
+      return;
+    }
+
+    if (!this.rightHandSide) {
+      this.rightHandSide = this.leftHandSide; //! key difference
+    }
+
+    this.leftHandSide = parseFloat(this.leftHandSide);
+    this.rightHandSide = parseFloat(this.rightHandSide);
+
+    this.calculate("binary");
+    this.leftHandSide = this.result;
+    this.display.updateValueOnScreen(this.leftHandSide);
+    // this.rightHandSide = null; //?
+  }
+
+  calculate(type) {
+    if (type === "unary") {
+      this.result = unaryOperations[this.operator](this.leftHandSide);
+      return;
+    }
+    if (type === "binary") {
+      this.result = binaryOperations[this.operator](
+        this.leftHandSide,
+        this.rightHandSide
+      );
+      return;
+    }
+  }
+
+  //   setResult(result) {
+  //     this.result = result;
+  //     render result
+  //   }
+
+  handleUnaryOperation(operator) {
+    if (this.rightHandSide !== null) {
+      this.rightHandSide = parseFloat(this.rightHandSide);
+      this.rightHandSide = unaryOperations[operator](this.rightHandSide); //? calculate("unary") but with rightHandSide
+      this.display.updateValueOnScreen(this.rightHandSide);
+      return;
+    }
+
+    this.operator = operator;
+
+    this.calculate("unary");
+    this.leftHandSide = this.result;
+    this.display.updateValueOnScreen(this.leftHandSide);
+
+    this.rightHandSide = null;
+  }
+
+  handleAllClear() {
+    this.resetParameters();
+    this.display.updateValueOnScreen(0);
+  }
+
+  handleDecimal() {
+    if (this.leftHandSide !== null && this.rightHandSide === null) {
+      this.leftHandSide += ".";
+      this.display.updateValueOnScreen(this.leftHandSide);
+      return;
+    }
+
+    if (this.leftHandSide !== null && this.rightHandSide !== null) {
+      this.rightHandSide += ".";
+      this.display.updateValueOnScreen(this.rightHandSide);
+      return;
+    }
+
+    if (this.result !== null) {
+      this.resetParameters();
+      this.display.updateValueOnScreen("0.");
+      return;
+    }
+
+    if (this.leftHandSide === null) {
+      this.leftHandSide = "0.";
+      this.display.updateValueOnScreen(this.leftHandSide);
+      return;
+    }
+    if (
+      (this.leftHandSide !== null && this.leftHandSide.includes(".")) ||
+      (this.rightHandSide !== null && this.rightHandSide.includes("."))
+    ) {
+      return;
+    }
   }
 }
 
-const calculator = new Calculator();
+const binaryOperations = {
+  add: (lhs, rhs) => lhs + rhs,
+  subtract: (lhs, rhs) => lhs - rhs,
+  multiply: (lhs, rhs) => lhs * rhs,
+  divide: (lhs, rhs) => lhs / rhs,
+};
 
-const display = document.querySelector(".display");
-const displayContent = document.querySelector(".display-content");
+const unaryOperations = {
+  negate: (lhs) => -lhs,
+  percentage: (lhs) => lhs / 100,
+  // square:  (lhs) => lhs * lhs,
+  // cube:    (lhs) => lhs * lhs * lhs,
+  // squareRoot: (lhs) => Math.sqrt(lhs),
+  // cubeRoot: (lhs) => Math.cbrt(lhs),
+  // inverse: (lhs) => 1 / lhs,
+};
 
-function showNumberOnDisplay() {
-  displayContent.textContent = calculator.result;
-}
+const getKeyType = (key) => {
+  const type = key.dataset.type;
+  if (!type) return;
+  return type;
+};
 
-function handleDigitButtonClick(event) {
-  const digit = event.target.textContent;
-  if (calculator.isResultCalculated) {
-    calculator.resetStates();
-    displayContent.textContent = "";
-  }
-  if (calculator.isOperatorButtonPressed) {
-    displayContent.textContent = "";
-    calculator.isOperatorButtonPressed = false;
-  }
-  if (digit === "0" && displayContent.textContent === "0") {
-    return;
-  }
-  if (digit !== "0" && displayContent.textContent === "0") {
-    displayContent.textContent = digit;
-    return;
-  }
-  displayContent.textContent += digit;
-}
+const getKeyAction = (key) => {
+  const action = key.dataset.action;
+  if (!action) return;
+  return action;
+};
 
-// function handleAllClearButtonClick() {
-//   displayContent.textContent = "";
-//   calculator.operator = "";
-// }
+const digitButtons = document.querySelectorAll("[data-type='digit']");
+const binaryOperationButtons = document.querySelectorAll(
+  "[data-type='binary']"
+);
+const unaryOperationButtons = document.querySelectorAll("[data-type='unary']");
+const equalButton = document.querySelector("[data-action='equals']");
+const allClearButton = document.querySelector("[data-type='clear']");
+const decimalButton = document.querySelector("[data-type='decimal']");
+const display = document.querySelector(".display-content");
 
-const digitButtons = document.querySelectorAll(".digit");
+const calculator = new Calculator(display);
 
-digitButtons.forEach((digitButton) => {
-  digitButton.addEventListener("click", handleDigitButtonClick);
+digitButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const digit = button.innerText;
+    calculator.handleDigit(digit);
+    console.debug(JSON.stringify(calculator));
+  });
 });
 
-// const allClearButton = document.querySelector("#clear");
-// allClearButton.addEventListener("click", handleAllClearButtonClick);
+binaryOperationButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const operator = getKeyAction(button);
+    calculator.handleBinaryOperation(operator);
+    console.debug(JSON.stringify(calculator));
+  });
+});
 
-function handleDecimalButtonClick() {
-  if (displayContent.textContent.includes(".")) return;
-  if (displayContent.textContent === "") {
-    displayContent.textContent = "0.";
-    return;
-  }
-  displayContent.textContent += ".";
-}
+allClearButton.addEventListener("click", () => {
+  calculator.handleAllClear();
+  console.debug(JSON.stringify(calculator));
+});
 
-const decimalButton = document.querySelector(".decimal");
-decimalButton.addEventListener("click", handleDecimalButtonClick);
+equalButton.addEventListener("click", () => {
+  calculator.handleEqual();
+  console.debug(JSON.stringify(calculator));
+});
 
-function handleOperatorButtonClick(event) {
-  const operator = event.currentTarget.id;
-  const currentValue = parseFloat(displayContent.textContent);
-  if (isNaN(currentValue)) return;
-  console.log(operator);
-  switch (operator) {
-    case "clear": {
-      calculator.resetStates();
-      showNumberOnDisplay();
-      break;
-    }
-    case "positive-negative": {
-      calculator.result = currentValue * -1;
-      showNumberOnDisplay();
-      break;
-    }
-    case "percent": {
-      calculator.result = currentValue / 100;
-      showNumberOnDisplay();
-      break;
-    }
-    case "add": {
-      calculator.currentValue = currentValue;
-      calculator.operator = "add";
-      calculator.isWaitingForNextValue = true;
-      break;
-    }
-    case "subtract": {
-      calculator.currentValue = currentValue;
-      calculator.operator = "subtract";
-      calculator.isWaitingForNextValue = true;
-      break;
-    }
-    case "multiply": {
-      calculator.currentValue = currentValue;
-      calculator.operator = "multiply";
-      calculator.isWaitingForNextValue = true;
-      break;
-    }
-    case "divide": {
-      calculator.currentValue = currentValue;
-      calculator.operator = "divide";
-      calculator.isWaitingForNextValue = true;
-      break;
-    }
+unaryOperationButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const operator = getKeyAction(button);
+    calculator.handleUnaryOperation(operator);
+    console.log(JSON.stringify(calculator));
+  });
+});
 
-    case "equals": {
-      if (calculator.isWaitingForNextValue) {
-        calculator.previousValue = currentValue;
-      } else {
-        calculator.currentValue = calculator.result;
-      }
-      calculator.isWaitingForNextValue = false;
-      calculator.calculate();
-      showNumberOnDisplay();
-      break;
-    }
-  }
-  calculator.isOperatorButtonPressed = true;
-  console.log(
-    calculator.currentValue,
-    calculator.previousValue,
-    calculator.result,
-    calculator.isWaitingForNextValue
-  );
-}
-
-const operatorButtons = document.querySelectorAll(".operator.portrait");
-operatorButtons.forEach((operatorButton) => {
-  operatorButton.addEventListener("click", handleOperatorButtonClick);
+decimalButton.addEventListener("click", () => {
+  calculator.handleDecimal();
+  console.debug(JSON.stringify(calculator));
 });
